@@ -1,4 +1,4 @@
-module zsh_yakumo
+module github.com/akinazuki/zsh_yakumo
 
 go 1.23.3
 
