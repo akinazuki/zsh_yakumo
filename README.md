@@ -54,7 +54,7 @@
 2. **Build the plugin**
    ```bash
    cd ~/.oh-my-zsh/custom/plugins/zsh_yakumo
-   go build -o dist/ .
+   go build -o dist/zsh_yakumo ./cmd/zsh_yakumo.go
    ```
 
 3. **Configure your shell**
@@ -160,14 +160,15 @@ bindkey '^G' create_completion
 git clone https://github.com/akinazuki/zsh_yakumo.git
 cd zsh_yakumo
 go mod tidy
-go build -o dist/ .
+go build -o dist/zsh_yakumo ./cmd/zsh_yakumo.go
 ```
 
 ### Project Structure
 
 ```
 zsh_yakumo/
-├── main.go                 # Main application logic
+├── cmd/
+│   └── zsh_yakumo.go      # Main application logic
 ├── internal/
 │   ├── logger/            # Logging functionality
 │   └── defs/              # Type definitions

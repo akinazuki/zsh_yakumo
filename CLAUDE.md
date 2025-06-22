@@ -8,10 +8,11 @@ This is a zsh plugin called `zsh_yakumo` that provides AI-powered command comple
 
 ## Architecture
 
-- **main.go**: Core Go application that handles OpenAI API communication and command processing
+- **cmd/zsh_yakumo.go**: Core Go application that handles OpenAI API communication and command processing
 - **zsh_yakumo.plugin.zsh**: Zsh plugin script that integrates with the shell and calls the Go binary
-- **defs/CompletionRequest.go**: Go structs for OpenAI API request/response handling
-- **dist/zsh_yakumo**: Compiled Go binary (built from main.go)
+- **internal/defs/completion_request.go**: Go structs for OpenAI API request/response handling
+- **internal/logger/logger.go**: Logging functionality with environment-based configuration
+- **dist/zsh_yakumo**: Compiled Go binary (built from cmd/zsh_yakumo.go)
 - **zsh_yakumo.env**: Configuration template for OpenAI credentials
 
 ## Configuration
@@ -23,8 +24,8 @@ The plugin requires configuration in `~/.config/zsh_yakumo.env`:
 ## Build Commands
 
 ```bash
-# Build the Go binary (correct command from README)
-go build -o dist/ .
+# Build the Go binary (correct command for new structure)
+go build -o dist/zsh_yakumo ./cmd/zsh_yakumo.go
 
 # Install dependencies
 go mod tidy
@@ -32,8 +33,8 @@ go mod tidy
 
 ## Development Workflow
 
-1. Modify Go source code in main.go or defs/
-2. Rebuild the binary: `go build -o dist/ .`
+1. Modify Go source code in cmd/zsh_yakumo.go or internal/ packages
+2. Rebuild the binary: `go build -o dist/zsh_yakumo ./cmd/zsh_yakumo.go`
 3. Test the zsh plugin functionality by sourcing the plugin file
 
 ## Plugin Installation
