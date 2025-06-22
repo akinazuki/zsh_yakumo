@@ -275,13 +275,13 @@ func requestOpenAICompletion(fullCommand string) string {
 
 	appLogger.Debug("Extracting command from JSON path: output[0].content[0].text")
 	outputArray := jsonData.GetArray("output")
-	if outputArray == nil || len(outputArray) == 0 {
+	if len(outputArray) == 0 {
 		appLogger.Error("No 'output' array found in response or array is empty")
 		return ""
 	}
 
 	contentArray := outputArray[0].GetArray("content")
-	if contentArray == nil || len(contentArray) == 0 {
+	if len(contentArray) == 0 {
 		appLogger.Error("No 'content' array found in output[0] or array is empty")
 		return ""
 	}
