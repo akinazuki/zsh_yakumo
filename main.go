@@ -7,6 +7,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -25,7 +26,7 @@ type OpenAIConfig struct {
 var appLogger = logger.NewLogger()
 var openAIConfig = readConfig()
 var system_prompt = "You are a zsh shell expert, please help me complete the following command, you should only output the completed command, no need to include any other explanation. Do not put completed command in a code block."
-var zsh_prefix = "#!/bin/zsh\n\n"
+var zshPrefix = "#!/bin/zsh\n\n"
 
 func readConfig() OpenAIConfig {
 	HOME := os.Getenv("HOME")
@@ -85,8 +86,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	cursor_pointer := args[0]
-	appLogger.Debug("Cursor pointer: %s", cursor_pointer)
+	cursorPointer := args[0]
+	appLogger.Debug("Cursor pointer: %s", cursorPointer)
 
 	stdinBuf, err := io.ReadAll(os.Stdin)
 	if err != nil {
@@ -96,14 +97,15 @@ func main() {
 	appLogger.Debug("Read %d bytes from stdin", len(stdinBuf))
 	appLogger.Debug("Raw stdin content: %q", string(stdinBuf))
 
-	if len(stdinBuf) < len(cursor_pointer) {
+	if len(stdinBuf) < len(cursorPointer) {
 		appLogger.Error("Invalid input: stdin buffer shorter than cursor pointer")
 		os.Exit(1)
 	}
 
-	bufferPrefix := string(stdinBuf[:len(stdinBuf)-len(cursor_pointer)])
-	bufferSuffix := string(stdinBuf[len(stdinBuf)-len(cursor_pointer):])
-	fullCommand := zsh_prefix + bufferPrefix + bufferSuffix
+	cursorPosition, _ := strconv.Atoi(cursorPointer)
+	bufferPrefix := string(stdinBuf[:cursorPosition])
+	bufferSuffix := string(stdinBuf[cursorPosition:])
+	fullCommand := zshPrefix + bufferPrefix + bufferSuffix
 
 	appLogger.Info("Buffer analysis - Prefix: %q, Suffix: %q", bufferPrefix, bufferSuffix)
 	appLogger.Debug("Full command to be sent: %q", fullCommand)
@@ -129,7 +131,7 @@ func postProcessCommand(
 	appLogger.Debug("Post-processing - Buffer prefix: %q, Buffer suffix: %q", bufferPrefix, bufferSuffix)
 
 	originalCompletion := completion
-	completion = strings.TrimPrefix(completion, zsh_prefix)
+	completion = strings.TrimPrefix(completion, zshPrefix)
 	if originalCompletion != completion {
 		appLogger.Debug("Trimmed zsh prefix from completion")
 	}
