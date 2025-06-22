@@ -25,7 +25,7 @@ type OpenAIConfig struct {
 
 var appLogger = logger.NewLogger()
 var openAIConfig = readConfig()
-var system_prompt = "You are a zsh shell expert, please help me complete the following command, you should only output the completed command, no need to include any other explanation. Do not put completed command in a code block."
+var system_prompt = "You are a zsh shell expert, please help me complete the following command, you should only output the completed command, no need to include any other explanation. Do not put completed command in a code block. When using quotes in commands, prefer single quotes over double quotes to avoid shell expansion issues."
 var zshPrefix = "#!/bin/zsh\n\n"
 
 func readConfig() OpenAIConfig {
