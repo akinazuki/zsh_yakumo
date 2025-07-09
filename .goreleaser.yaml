@@ -22,6 +22,7 @@ builds:
       - linux
       - windows
       - darwin
+    main: ./cmd/zsh-yakumo
 
 archives:
   - formats: [tar.gz]
